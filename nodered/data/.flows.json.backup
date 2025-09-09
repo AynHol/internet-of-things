@@ -1,0 +1,223 @@
+[
+    {
+        "id": "dc9d5d534fab6eb2",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "607da66db889fa93",
+        "type": "mqtt-broker",
+        "name": "Mosquitto",
+        "broker": "mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "80a678c8641e0e71",
+        "type": "mongodb4-client",
+        "name": "",
+        "protocol": "mongodb",
+        "hostname": "mongo",
+        "port": "27017",
+        "dbName": "sensores",
+        "appName": "",
+        "authSource": "",
+        "authMechanism": "DEFAULT",
+        "tls": false,
+        "tlsCAFile": "",
+        "tlsCertificateKeyFile": "",
+        "tlsInsecure": false,
+        "connectTimeoutMS": "30000",
+        "socketTimeoutMS": "0",
+        "minPoolSize": "0",
+        "maxPoolSize": "100",
+        "maxIdleTimeMS": "0",
+        "uri": "",
+        "advanced": "{}",
+        "uriTabActive": "tab-uri-simple"
+    },
+    {
+        "id": "0d295a6373068a01",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "iot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "4c35974a37f3211f",
+        "type": "debug",
+        "z": "dc9d5d534fab6eb2",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ebaebbe55c0893f4",
+        "type": "function",
+        "z": "dc9d5d534fab6eb2",
+        "name": "function 1",
+        "func": "var obj = {};\n\nobj._id = msg.id;\nobj.createAt = new Date();\nobj.temperature = msg.payload.t;\nobj.humidity = msg.payload.umid;\nobj.topic = msg.topic;\n\nmsg = {};\nmsg.payload = obj;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 320,
+        "wires": [
+            [
+                "4c35974a37f3211f",
+                "7868a84c202a6d77",
+                "2b778da334f126a5"
+            ]
+        ]
+    },
+    {
+        "id": "db829189fd79a130",
+        "type": "uuid",
+        "z": "dc9d5d534fab6eb2",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "id",
+        "fieldType": "msg",
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "ebaebbe55c0893f4"
+            ]
+        ]
+    },
+    {
+        "id": "27838cf1f6ac63ae",
+        "type": "mqtt in",
+        "z": "dc9d5d534fab6eb2",
+        "name": "",
+        "topic": "#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "607da66db889fa93",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "db829189fd79a130"
+            ]
+        ]
+    },
+    {
+        "id": "7868a84c202a6d77",
+        "type": "mongodb4",
+        "z": "dc9d5d534fab6eb2",
+        "clientNode": "80a678c8641e0e71",
+        "mode": "collection",
+        "collection": "sensor",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 820,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1aa0b49db9cb4fc0",
+        "type": "postgresql",
+        "z": "dc9d5d534fab6eb2",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "0d295a6373068a01",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 1050,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b778da334f126a5",
+        "type": "function",
+        "z": "dc9d5d534fab6eb2",
+        "name": "function 2",
+        "func": "var objeto = ();\n\nobjeto.query = 'INSERT INTO sensores (id, createdAt, temperature, humidity, topic) VALUES ($1, $2, $3, $4, $5)';\nobjeto.params = [\n    msg.payload._id,\n    msg.payload.createAt,\n    msg.payload.temperature,\n    msg.payload.humidity,\n    msg.payload.topic\n]\n\nmsg = {};\nmsg = objeto;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 1,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 480,
+        "wires": [
+            [
+                "1aa0b49db9cb4fc0"
+            ]
+        ]
+    }
+]
