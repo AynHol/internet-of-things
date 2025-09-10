@@ -3,6 +3,14 @@
         "id": "dc9d5d534fab6eb2",
         "type": "tab",
         "label": "Fluxo 1",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4b494d1c3d3f5ff3",
+        "type": "tab",
+        "label": "Fluxo 2",
         "disabled": false,
         "info": "",
         "env": []
@@ -88,10 +96,65 @@
         "passwordFieldType": "str"
     },
     {
+        "id": "27838cf1f6ac63ae",
+        "type": "mqtt in",
+        "z": "dc9d5d534fab6eb2",
+        "name": "",
+        "topic": "#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "607da66db889fa93",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "db829189fd79a130"
+            ]
+        ]
+    },
+    {
+        "id": "1aa0b49db9cb4fc0",
+        "type": "postgresql",
+        "z": "dc9d5d534fab6eb2",
+        "name": "",
+        "query": "",
+        "postgreSQLConfig": "0d295a6373068a01",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 1050,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7868a84c202a6d77",
+        "type": "mongodb4",
+        "z": "dc9d5d534fab6eb2",
+        "clientNode": "80a678c8641e0e71",
+        "mode": "collection",
+        "collection": "sensor",
+        "operation": "insertOne",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 820,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "4c35974a37f3211f",
         "type": "debug",
         "z": "dc9d5d534fab6eb2",
-        "name": "debug 1",
+        "name": "debug",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -100,9 +163,29 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 820,
+        "x": 810,
         "y": 320,
         "wires": []
+    },
+    {
+        "id": "2b778da334f126a5",
+        "type": "function",
+        "z": "dc9d5d534fab6eb2",
+        "name": "function 2",
+        "func": "var objeto = {};\n\nobjeto.query = 'INSERT INTO sensores (id, createdAt, temperature, humidity, topic) VALUES ($1, $2, $3, $4, $5)';\nobjeto.params = [\n    msg.payload._id,\n    msg.payload.createAt,\n    msg.payload.temperature,\n    msg.payload.humidity,\n    msg.payload.topic\n]\n\nmsg = {};\nmsg = objeto;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 480,
+        "wires": [
+            [
+                "1aa0b49db9cb4fc0"
+            ]
+        ]
     },
     {
         "id": "ebaebbe55c0893f4",
@@ -146,11 +229,11 @@
         ]
     },
     {
-        "id": "27838cf1f6ac63ae",
+        "id": "3d950b6200a04dd1",
         "type": "mqtt in",
-        "z": "dc9d5d534fab6eb2",
+        "z": "4b494d1c3d3f5ff3",
         "name": "",
-        "topic": "#",
+        "topic": "sensor/#",
         "qos": "0",
         "datatype": "auto-detect",
         "broker": "607da66db889fa93",
@@ -158,66 +241,181 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
+        "x": 200,
         "y": 160,
         "wires": [
             [
-                "db829189fd79a130"
+                "9059fdb3ee413242"
             ]
         ]
     },
     {
-        "id": "7868a84c202a6d77",
-        "type": "mongodb4",
-        "z": "dc9d5d534fab6eb2",
-        "clientNode": "80a678c8641e0e71",
-        "mode": "collection",
-        "collection": "sensor",
-        "operation": "insertOne",
-        "output": "toArray",
-        "maxTimeMS": "0",
-        "handleDocId": false,
+        "id": "75555f5bfb5df1c9",
+        "type": "mqtt in",
+        "z": "4b494d1c3d3f5ff3",
         "name": "",
-        "x": 820,
-        "y": 400,
+        "topic": "devices/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "607da66db889fa93",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 240,
         "wires": [
-            []
+            [
+                "2f969105f941a37b"
+            ]
         ]
     },
     {
-        "id": "1aa0b49db9cb4fc0",
+        "id": "336cd5a0ed9d8e95",
         "type": "postgresql",
-        "z": "dc9d5d534fab6eb2",
+        "z": "4b494d1c3d3f5ff3",
         "name": "",
         "query": "",
         "postgreSQLConfig": "0d295a6373068a01",
         "split": false,
         "rowsPerMsg": 1,
         "outputs": 1,
-        "x": 1050,
-        "y": 480,
+        "x": 1490,
+        "y": 40,
         "wires": [
             []
         ]
     },
     {
-        "id": "2b778da334f126a5",
+        "id": "c5c558bb2e9b58ca",
         "type": "function",
-        "z": "dc9d5d534fab6eb2",
-        "name": "function 2",
-        "func": "var objeto = ();\n\nobjeto.query = 'INSERT INTO sensores (id, createdAt, temperature, humidity, topic) VALUES ($1, $2, $3, $4, $5)';\nobjeto.params = [\n    msg.payload._id,\n    msg.payload.createAt,\n    msg.payload.temperature,\n    msg.payload.humidity,\n    msg.payload.topic\n]\n\nmsg = {};\nmsg = objeto;\n\nreturn msg;",
+        "z": "4b494d1c3d3f5ff3",
+        "name": "DeviceDataProcess",
+        "func": "var message = {};\nmessage.payload = msg.payload;\nmessage.payload.created_at = new Date();\nmessage.operation = \"insertOne\";\nmessage.collection = \"devices\";\n\nmsg = {};\nmsg = message;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
-        "noerr": 1,
+        "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 480,
+        "x": 650,
+        "y": 240,
         "wires": [
             [
-                "1aa0b49db9cb4fc0"
+                "fa86b7fd5a192483",
+                "5940ecd9d91ae4bd"
             ]
         ]
+    },
+    {
+        "id": "fa86b7fd5a192483",
+        "type": "mongodb4",
+        "z": "4b494d1c3d3f5ff3",
+        "clientNode": "80a678c8641e0e71",
+        "mode": "collection",
+        "collection": "",
+        "operation": "",
+        "output": "toArray",
+        "maxTimeMS": "0",
+        "handleDocId": false,
+        "name": "",
+        "x": 930,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f969105f941a37b",
+        "type": "uuid",
+        "z": "4b494d1c3d3f5ff3",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "c5c558bb2e9b58ca"
+            ]
+        ]
+    },
+    {
+        "id": "5940ecd9d91ae4bd",
+        "type": "debug",
+        "z": "4b494d1c3d3f5ff3",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9059fdb3ee413242",
+        "type": "uuid",
+        "z": "4b494d1c3d3f5ff3",
+        "uuidVersion": "v4",
+        "namespaceType": "",
+        "namespace": "",
+        "namespaceCustom": "",
+        "name": "",
+        "field": "payload._id",
+        "fieldType": "msg",
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "b947c9ea6d5e2c9d"
+            ]
+        ]
+    },
+    {
+        "id": "b947c9ea6d5e2c9d",
+        "type": "function",
+        "z": "4b494d1c3d3f5ff3",
+        "name": "ProcessDataReading",
+        "func": "var message = {};\nmessage.payload = msg.payload;\nmessage.payload.topic = msg.topic;\nmessage.payload.created_at = new Date();\nmessage.operation = \"insertOne\";\nmessage.collection = \"reading_data\";\n\nmsg = {};\nmsg = message;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 160,
+        "wires": [
+            [
+                "43dbfea4777d5bf0",
+                "fa86b7fd5a192483"
+            ]
+        ]
+    },
+    {
+        "id": "43dbfea4777d5bf0",
+        "type": "debug",
+        "z": "4b494d1c3d3f5ff3",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 120,
+        "wires": []
     }
 ]
