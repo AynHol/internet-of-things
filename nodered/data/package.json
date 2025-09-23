@@ -5,7 +5,6 @@
     "private": true,
     "dependencies": {
         "node-red-contrib-mongodb4": "~3.1.1",
-        "node-red-contrib-postgresql": "~0.14.2",
         "node-red-contrib-uuid": "~0.0.4"
     }
 }

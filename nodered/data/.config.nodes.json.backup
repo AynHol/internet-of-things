@@ -446,24 +446,5 @@
                 "file": "/data/node_modules/node-red-contrib-mongodb4/src/mongodb4.js"
             }
         }
-    },
-    "node-red-contrib-uuid": {
-        "name": "node-red-contrib-uuid",
-        "version": "0.0.4",
-        "local": true,
-        "user": true,
-        "nodes": {
-            "UUID": {
-                "name": "UUID",
-                "types": [
-                    "uuid"
-                ],
-                "enabled": true,
-                "local": true,
-                "user": false,
-                "module": "node-red-contrib-uuid",
-                "file": "/data/node_modules/node-red-contrib-uuid/uuid/uuid.js"
-            }
-        }
     }
 }
